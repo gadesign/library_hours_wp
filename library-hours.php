@@ -25,3 +25,15 @@ License: GPL3
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+add_action('init','library_hours_entry');
+function library_hours_entry() {
+    register_post_type('lib_hours_entry', array(
+        'labels' => array(
+            'name' => __('Library Hours'),
+            'singular' => __('Library Hours Entry'),
+        ),
+        'public' => true,
+        'has_archive' => true,
+        'menu_icon' => 'dashicons-welcome-write-blog',
+    ));
+}
