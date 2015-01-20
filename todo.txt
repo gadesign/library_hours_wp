@@ -8,3 +8,8 @@ Add custom taxonomy for the tabs with Fall, Spring, Summer as the default.
 Add a metabox that list the taxonomies for entries and exceptions.
 Add the exception post type with date range and exceptions, and hours.
 Add a shortcode and a widget for today's hours.
+copy today's hours logic and possibly the template file.
+Add validation.
+Add nonce for forms.
+Setup Readme text.
+Upload to github and wordpress.org
