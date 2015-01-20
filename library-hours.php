@@ -148,13 +148,25 @@ function schedule_tab_meta_box_init () {
 }
 function schedule_tab_meta_box ($post, $box) {
     $tab_terms = get_terms('schedule_tab','hide_empty=0');
+
     if (!empty($tab_terms) && !is_wp_error($tab_terms)) {
+    $post_data = get_post_custom($post->ID);
+ 
+    if(isset($post_data['_schedule_tab_term'][0])) {
+      $selected_term = $post_data['_schedule_tab_term'][0];
+    }
     echo '<select name="schedule_tab_term" id="tab-term-select">';
     foreach ($tab_terms as $tab) {
         $tab_id = $tab->term_id;
         $tab_name = $tab->name;
-    echo '<option value="' . $tab_id . '">' . $tab_name . '</option>';
+    if($tab_name == $selected_term){
+    echo '<option value="' . $tab_name . '" selected>' . $tab_name . '</option>';   
+    } else {    
+    echo '<option value="' . $tab_name . '">' . $tab_name . '</option>';
     }
+    
+    }
+    
     echo '</select>';
     }
 //    wp_nonce_field(plugin_basename(__FILE__), 'schedule_tab_save_meta_box');
