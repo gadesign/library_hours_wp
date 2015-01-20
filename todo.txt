@@ -10,3 +10,6 @@ Add validation.
 Add nonce for forms.
 Setup Readme text.
 Upload to github and wordpress.org
+Add metabox for list order on entries and exceptions
+Add taxonomy order input for each of the schedule_tab terms on the options page.
+Add default open and close time for the options page.
