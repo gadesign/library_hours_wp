@@ -25,17 +25,33 @@ License: GPL3
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-// Add the library hours post type.
+// Add the library hours entry post type.
 add_action('init','library_hours_entry');
 function library_hours_entry() {
     register_post_type('lib_hours_entry', array(
         'labels' => array(
-            'name' => __('Library Hours'),
+            'name' => __('Library Hours Entry'),
             'singular' => __('Library Hours Entry'),
         ),
         'public' => false,
         'has_archive' => true,
         'menu_icon' => 'dashicons-welcome-learn-more',
+        'supports' => array('title'),
+        'show_ui' => true,
+    ));
+}
+
+// Add the library hours exception post type.
+add_action('init','library_hours_exception');
+function library_hours_exception() {
+    register_post_type('lib_hours_exception', array(
+        'labels' => array(
+            'name' => __('Library Hours Exception'),
+            'singular' => __('Library Hours Exception'),
+        ),
+        'public' => false,
+        'has_archive' => true,
+        'menu_icon' => 'dashicons-palmtree',
         'supports' => array('title'),
         'show_ui' => true,
     ));
@@ -62,10 +78,12 @@ add_action('add_meta_boxes','schedule_tab_meta_box_init');
 function schedule_tab_meta_box_init () {
     add_meta_box('schedule-tab-meta', 'Tab Name','schedule_tab_meta_box',
             'lib_hours_entry','normal','default');
+    add_meta_box('schedule-tab-meta', 'Tab Name','schedule_tab_meta_box',
+            'lib_hours_exception','normal','default');
 }
 function schedule_tab_meta_box ($post, $box) {
     $tab_terms = get_terms('schedule_tab','hide_empty=0');
-
+    
     if (!empty($tab_terms) && !is_wp_error($tab_terms)) {
     $post_data = get_post_custom($post->ID);
  
@@ -114,6 +132,8 @@ add_action('add_meta_boxes','date_range_meta_box_init');
 function date_range_meta_box_init () {
     add_meta_box('date-range-meta', 'Date Range','date_range_meta_box',
             'lib_hours_entry','normal','default');
+    add_meta_box('date-range-meta', 'Date Range','date_range_meta_box',
+            'lib_hours_exception','normal','default');
 }
 function date_range_meta_box ($post, $box) {
     $start_date = get_post_meta($post->ID, '_start_date', true);

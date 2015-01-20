@@ -4,9 +4,6 @@ Add default open and close hour.
 Add a closed checkbox to the meta box.
 Add custom styles and jquery with wp_enqueue.
 copy schedule tpl and setup entries and exceptions array, use taxonomy as a key.
-Add custom taxonomy for the tabs with Fall, Spring, Summer as the default.
-Add a metabox that list the taxonomies for entries and exceptions.
-Add the exception post type with date range and exceptions, and hours.
 Add a shortcode and a widget for today's hours.
 copy today's hours logic and possibly the template file.
 Add validation.
