@@ -41,6 +41,73 @@ function library_hours_entry() {
     ));
 }
 
+// Add a taxonomy for the tabs
+add_action('init','library_hours_taxonomy');
+function library_hours_taxonomy () {
+    register_taxonomy('schedule_tab',array(''), array(
+        'hierarchical' => true,
+        'label' => 'Tab Name',
+        'query_var' => true,
+        'rewrite' => true,
+        'sort' => true,
+    ));
+    $default_terms = array('Fall','Spring','Summer');
+    foreach($default_terms as $term){
+        wp_insert_term($term,'schedule_tab');
+    }
+}
+
+// Add metabox to select the taxonomy
+add_action('add_meta_boxes','schedule_tab_meta_box_init');
+function schedule_tab_meta_box_init () {
+    add_meta_box('schedule-tab-meta', 'Tab Name','schedule_tab_meta_box',
+            'lib_hours_entry','normal','default');
+}
+function schedule_tab_meta_box ($post, $box) {
+    $tab_terms = get_terms('schedule_tab','hide_empty=0');
+
+    if (!empty($tab_terms) && !is_wp_error($tab_terms)) {
+    $post_data = get_post_custom($post->ID);
+ 
+    if(isset($post_data['_schedule_tab_term'][0])) {
+      $selected_term = $post_data['_schedule_tab_term'][0];
+    }
+    echo '<select name="schedule_tab_term" id="tab-term-select">';
+    foreach ($tab_terms as $tab) {
+        $tab_id = $tab->term_id;
+        $tab_name = $tab->name;
+    if($tab_name == $selected_term){
+    echo '<option value="' . $tab_name . '" selected>' . $tab_name . '</option>';   
+    } else {    
+    echo '<option value="' . $tab_name . '">' . $tab_name . '</option>';
+    }
+    
+    }
+    
+    echo '</select>';
+    }
+//    wp_nonce_field(plugin_basename(__FILE__), 'schedule_tab_save_meta_box');
+}
+
+// Saves the metabox contents on form save.
+add_action('save_post', 'schedule_tab_save_meta_box');
+function schedule_tab_save_meta_box ($post_id) {
+    // Check the nonce for security.
+//        check_admin_referer(plugin_basename(__FILE__), 'schedule_tab_save_meta_box');
+
+    // Update only if there are values
+    if(isset($_POST['schedule_tab_term'])) {
+        // Skip save if an autosave is in progress.
+        if ( defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {
+            return;
+        }
+        
+        // Save the meta box
+        update_post_meta($post_id, '_schedule_tab_term', 
+                sanitize_text_field($_POST['schedule_tab_term']));
+    }
+   
+}
 
 // Add the date range meta box to the library hours post type.
 add_action('add_meta_boxes','date_range_meta_box_init');
@@ -122,74 +189,6 @@ function weekly_schedule_save_meta_box ($post_id) {
                 sanitize_text_field($_POST['weekly_schedule_end_time_'. strtolower($day)]));
     }
     }
-}
-
-// Add a taxonomy for the tabs
-add_action('init','library_hours_taxonomy');
-function library_hours_taxonomy () {
-    register_taxonomy('schedule_tab',array(''), array(
-        'hierarchical' => true,
-        'label' => 'Tab Name',
-        'query_var' => true,
-        'rewrite' => true,
-        'sort' => true,
-    ));
-    $default_terms = array('Fall','Spring','Summer');
-    foreach($default_terms as $term){
-        wp_insert_term($term,'schedule_tab');
-    }
-}
-
-// Add metabox to select the taxonomy
-add_action('add_meta_boxes','schedule_tab_meta_box_init');
-function schedule_tab_meta_box_init () {
-    add_meta_box('schedule-tab-meta', 'Tab Name','schedule_tab_meta_box',
-            'lib_hours_entry','normal','default');
-}
-function schedule_tab_meta_box ($post, $box) {
-    $tab_terms = get_terms('schedule_tab','hide_empty=0');
-
-    if (!empty($tab_terms) && !is_wp_error($tab_terms)) {
-    $post_data = get_post_custom($post->ID);
- 
-    if(isset($post_data['_schedule_tab_term'][0])) {
-      $selected_term = $post_data['_schedule_tab_term'][0];
-    }
-    echo '<select name="schedule_tab_term" id="tab-term-select">';
-    foreach ($tab_terms as $tab) {
-        $tab_id = $tab->term_id;
-        $tab_name = $tab->name;
-    if($tab_name == $selected_term){
-    echo '<option value="' . $tab_name . '" selected>' . $tab_name . '</option>';   
-    } else {    
-    echo '<option value="' . $tab_name . '">' . $tab_name . '</option>';
-    }
-    
-    }
-    
-    echo '</select>';
-    }
-//    wp_nonce_field(plugin_basename(__FILE__), 'schedule_tab_save_meta_box');
-}
-
-// Saves the metabox contents on form save.
-add_action('save_post', 'schedule_tab_save_meta_box');
-function schedule_tab_save_meta_box ($post_id) {
-    // Check the nonce for security.
-//        check_admin_referer(plugin_basename(__FILE__), 'schedule_tab_save_meta_box');
-
-    // Update only if there are values
-    if(isset($_POST['schedule_tab_term'])) {
-        // Skip save if an autosave is in progress.
-        if ( defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {
-            return;
-        }
-        
-        // Save the meta box
-        update_post_meta($post_id, '_schedule_tab_term', 
-                sanitize_text_field($_POST['schedule_tab_term']));
-    }
-   
 }
 
 // Add a short code to display the schedule
