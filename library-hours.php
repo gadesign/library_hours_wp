@@ -24,6 +24,35 @@ License: GPL3
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+// Register settings for library hours
+add_action('admin_init', 'library_hours_register_settings');
+function library_hours_register_settings () {
+    register_setting('library_hours_options_group', 'default_opening_time');
+    register_setting('library_hours_options_group', 'default_closing_time');
+}
+// Add Library Hours menu page.
+add_action('admin_menu','library_hours_menu');
+function library_hours_menu () {
+    add_options_page('Library Hours Options','Library Hours',
+            'manage_options','library_hours_options','library_hours_options_page');
+}
+function library_hours_options_page () {
+    if ( !current_user_can( 'manage_options' ) )  {
+		wp_die( __( 'You do not have sufficient permissions to access this page.' ) );
+	}
+	echo '<div class="wrap">';
+	echo '<h2>Library Hours Options</h2>';
+        echo '<form method="post" action="options.php">';
+        settings_fields('library_hours_options_group');
+        do_settings_sections('library_hours_options_group');
+        echo '<p>Default Opening time</p><p><input type="time" name="default_opening_time" value="'. 
+                esc_attr(get_option('default_opening_time')) .'" />';
+        echo '<p>Default Closing time</p><p><input type="time" name="default_closing_time" value="'. 
+                esc_attr(get_option('default_closing_time')) .'" />';
+        submit_button();
+        echo '</form>';
+	echo '</div>';
+}
 
 // Add the library hours entry post type.
 add_action('init','library_hours_entry');
