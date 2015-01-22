@@ -209,7 +209,15 @@ function weekly_schedule_meta_box ($post, $box) {
     $start_time = get_post_meta($post->ID, '_weekly_schedule_start_time_'. strtolower($day), true);
     $end_time = get_post_meta($post->ID, '_weekly_schedule_end_time_'.strtolower($day), true);
     
+    $default_start_time = get_option('default_opening_time');
+    $default_end_time = get_option('default_closing_time');
     
+    if (isset($default_start_time) && $start_time == "") {
+        $start_time = $default_start_time;
+    }
+    if (isset($default_end_time) && $end_time == "") {
+        $end_time = $default_end_time;
+    }
     echo '<div class="week-day"><p>' . $day . ' </p> <p> <input type="time" name="weekly_schedule_start_time_' . strtolower($day) . '" value="' . esc_attr($start_time) . '" />' . 
             ' to <input type="time" name="weekly_schedule_end_time_' . strtolower($day) . '" value="' . esc_attr($end_time) . '" />' . 
             '</p></div>';

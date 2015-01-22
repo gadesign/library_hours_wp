@@ -1,6 +1,4 @@
 Fix nonce errors
-Add Plugin Settings page.
-Add default open and close hour.
 Add a closed checkbox to the meta box.
 Add custom styles and jquery with wp_enqueue.
 copy schedule tpl and setup entries and exceptions array, use taxonomy as a key.
