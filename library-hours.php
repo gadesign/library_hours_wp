@@ -268,6 +268,21 @@ function weekly_schedule ($atts, $content = null) {
     <p>Mauris eleifend est et turpis. Duis id erat. Suspendisse potenti. Aliquam vulputate, pede vel vehicula accumsan, mi neque rutrum erat, eu congue orci lorem eget lorem. Vestibulum non ante. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Fusce sodales. Quisque eu urna vel enim commodo pellentesque. Praesent eu risus hendrerit ligula tempus pretium. Curabitur lorem enim, pretium nec, feugiat nec, luctus a, lacus.</p>
     <p>Duis cursus. Maecenas ligula eros, blandit nec, pharetra at, semper at, magna. Nullam ac lacus. Nulla facilisi. Praesent viverra justo vitae neque. Praesent blandit adipiscing velit. Suspendisse potenti. Donec mattis, pede vel pharetra blandit, magna ligula faucibus eros, id euismod lacus dolor eget odio. Nam scelerisque. Donec non libero sed nulla mattis commodo. Ut sagittis. Donec nisi lectus, feugiat porttitor, tempor ac, tempor vitae, pede. Aenean vehicula velit eu tellus interdum rutrum. Maecenas commodo. Pellentesque nec elit. Fusce in lacus. Vivamus a libero vitae lectus hendrerit hendrerit.</p>
   </div>
-</div>';
+</div>' .
+'<script src="' . plugins_url( 'js/script.js' , __FILE__ ) . '"></script>';
+    wp_enqueue_script('jQuery');
+    wp_enqueue_script('jquery-ui-tabs');
+    wp_enqueue_style('plugin_name-admin-ui-css',
+                '//code.jquery.com/ui/1.11.2/themes/smoothness/jquery-ui.css',
+                false,
+                "1.11.2",
+                false);
     return $html;
+}
+
+
+add_action('wp_enqueue_scripts', 'library_hours_load_scripts');
+function library_hours_load_scripts () {
+    wp_register_script('lh_script',get_stylesheet_directory_uri() . '/js/script.js', array('jQuery'),"1.0");
+    
 }

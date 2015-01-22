@@ -1,6 +1,5 @@
 Fix nonce errors
 Add a closed checkbox to the meta box.
-Add custom styles and jquery with wp_enqueue.
 copy schedule tpl and setup entries and exceptions array, use taxonomy as a key.
 Add a shortcode and a widget for today's hours.
 copy today's hours logic and possibly the template file.
@@ -11,3 +10,6 @@ Upload to github and wordpress.org
 Add metabox for list order on entries and exceptions
 Add taxonomy order input for each of the schedule_tab terms on the options page.
 Add default open and close time for the options page.
+merge entry fields into a single array.
+make a get entries function that returns an array of ['tab name']['weight'] and['tab name']['post']
+make a get exceptions function that returns an array of ['tab name']['weight'] and['tab name']['post'];
