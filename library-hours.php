@@ -251,16 +251,20 @@ function weekly_schedule_save_meta_box ($post_id) {
 // Add a short code to display the schedule
 add_shortcode('weekly_schedule','weekly_schedule');
 function weekly_schedule ($atts, $content = null) {
+    $days = array('monday','tuesday','wednesday','thursday','friday','saturday','sunday');
     $entries = library_hours_get_entries();
     $groups = library_hours_get_groups();
     $html = '<div id="tabs">
   <ul>';
+    // Loop to add the tabs.
     foreach($groups as $key => $value) {
     $html .= '<li><a href="#' . strtolower($key) . '">' . $key . '</a></li>';
     }
   $html .= '</ul>';
+  // Loop to add the group containers.
   foreach ($entries as $key => $values) {
       $html .= '<div id="' . strtolower($key) . '">';
+      // Loop to add the schedule entries
       foreach ($values as $id => $post ) {
           $title = get_the_title($id);
           $start_date = $post['_start_date'][0];
@@ -272,6 +276,20 @@ function weekly_schedule ($atts, $content = null) {
                 $html .= '<span class="entry-date-range">' .
                         $start_date . ' - ' . $end_date .
                         '</span>';
+                $html .= '<table class="library-hours-table"><thead><tr><th>Day</th><th>Hours</th></tr></thead>';
+                $html .= '<tbody>';
+                
+                foreach($days as $day) {
+                    $open_time = $post['_weekly_schedule_start_time_' . $day][0];
+                    $close_time = $post['_weekly_schedule_end_time_' . $day][0];
+                    $html .= '<tr>';
+                    $html .= '<td class="day">' . ucfirst($day) . '</td>';
+                    $html .= '<td class="hours">' . $open_time . ' - ' . 
+                            $close_time . '</td>';
+                    $html .= '</tr>';
+                }
+                $html .= '</tbody>';
+                $html .= '</table>';
             $html .= '</div>';
           $html .= '</div>';
       }
@@ -281,11 +299,13 @@ $html .= '</div>';
 $html .= '<script src="' . plugins_url( 'js/script.js' , __FILE__ ) . '"></script>';
     wp_enqueue_script('jQuery');
     wp_enqueue_script('jquery-ui-tabs');
-    wp_enqueue_style('plugin_name-admin-ui-css',
+    wp_enqueue_style('jquery-ui-style',
                 '//code.jquery.com/ui/1.11.2/themes/smoothness/jquery-ui.css',
                 false,
                 "1.11.2",
                 false);
+    wp_enqueue_style('schedule-style',
+                plugins_url( 'css/schedule.css' , __FILE__ ));
     return $html;
 }
 

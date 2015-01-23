@@ -1,0 +1,77 @@
+.group-date {
+    font-size: .8em;
+}
+
+.entry-date-range {
+    margin-top: -30px;
+    margin-bottom: 5px;
+}
+table.library-hours-table {
+    width: 315px;
+}
+.library-hours-table th {
+    background: #b9c9fe;
+    border-top: 4px solid #aabcfe;
+    border-bottom: 1px solid #fff;
+    padding: 10px;
+}
+.library-hours-table td {
+    background: #e8edff;
+    border-top: 1px solid transparent;
+    border-bottom: 1px solid #fff;
+    padding: 10px;
+}
+.library-hours-table tr:hover td{
+    background: #b9c9fe;
+    border-top: 1px solid transparent;
+    border-bottom: 1px solid #fff;
+    padding: 10px;
+}
+.schedule-item {
+    background: rgba(204, 204, 204, 0.49);
+    width: 360px;
+    margin-right: 8px;
+    border-radius: 5px;
+    padding-top: 15px;
+    padding-bottom: 15px;
+    display: inline-block;
+    margin-bottom: 20px;
+    font-size: .9em;
+}
+.schedule-item table {
+    margin: 0;
+}
+
+.schedule-item .hours {
+    text-align: center;
+}
+
+.schedule-item h2 {
+    margin-top: -10px;
+}
+.schedule-item-content {
+    width: 320px;
+    margin: 0 auto;
+}
+.schedule-entries {
+    border: 1px solid black;
+    margin-bottom: 30px;
+}
+div.exception-container {
+    background: rgba(204, 204, 204, 0.49);
+    width: 360px;
+    border-radius: 5px;
+    padding-bottom: 10px;
+    padding-top: 10px;
+    margin-right: 8px;
+}
+div.exceptions {
+    margin-left: 30px;
+    font-size: .8em;
+}
+div.exceptions p{
+    margin: 0;
+}
+div.exceptions h1 {
+    margin: 0
+}

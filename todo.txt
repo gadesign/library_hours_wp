@@ -10,3 +10,5 @@ Upload to github and wordpress.org
 Add metabox for list order on entries and exceptions
 Add taxonomy order input for each of the schedule_tab terms on the options page.
 merge entry fields into a single array.
+change the time formatting for the date range.
+change the time formatting for hours.
