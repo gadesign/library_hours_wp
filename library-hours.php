@@ -251,25 +251,34 @@ function weekly_schedule_save_meta_box ($post_id) {
 // Add a short code to display the schedule
 add_shortcode('weekly_schedule','weekly_schedule');
 function weekly_schedule ($atts, $content = null) {
-    
+    $entries = library_hours_get_entries();
+    $groups = library_hours_get_groups();
     $html = '<div id="tabs">
-  <ul>
-    <li><a href="#tabs-1">Nunc tincidunt</a></li>
-    <li><a href="#tabs-2">Proin dolor</a></li>
-    <li><a href="#tabs-3">Aenean lacinia</a></li>
-  </ul>
-  <div id="tabs-1">' .
-  'Test' .
-  '</div>
-  <div id="tabs-2">
-    <p>Morbi tincidunt, dui sit amet facilisis feugiat, odio metus gravida ante, ut pharetra massa metus id nunc. Duis scelerisque molestie turpis. Sed fringilla, massa eget luctus malesuada, metus eros molestie lectus, ut tempus eros massa ut dolor. Aenean aliquet fringilla sem. Suspendisse sed ligula in ligula suscipit aliquam. Praesent in eros vestibulum mi adipiscing adipiscing. Morbi facilisis. Curabitur ornare consequat nunc. Aenean vel metus. Ut posuere viverra nulla. Aliquam erat volutpat. Pellentesque convallis. Maecenas feugiat, tellus pellentesque pretium posuere, felis lorem euismod felis, eu ornare leo nisi vel felis. Mauris consectetur tortor et purus.</p>
-  </div>
-  <div id="tabs-3">
-    <p>Mauris eleifend est et turpis. Duis id erat. Suspendisse potenti. Aliquam vulputate, pede vel vehicula accumsan, mi neque rutrum erat, eu congue orci lorem eget lorem. Vestibulum non ante. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Fusce sodales. Quisque eu urna vel enim commodo pellentesque. Praesent eu risus hendrerit ligula tempus pretium. Curabitur lorem enim, pretium nec, feugiat nec, luctus a, lacus.</p>
-    <p>Duis cursus. Maecenas ligula eros, blandit nec, pharetra at, semper at, magna. Nullam ac lacus. Nulla facilisi. Praesent viverra justo vitae neque. Praesent blandit adipiscing velit. Suspendisse potenti. Donec mattis, pede vel pharetra blandit, magna ligula faucibus eros, id euismod lacus dolor eget odio. Nam scelerisque. Donec non libero sed nulla mattis commodo. Ut sagittis. Donec nisi lectus, feugiat porttitor, tempor ac, tempor vitae, pede. Aenean vehicula velit eu tellus interdum rutrum. Maecenas commodo. Pellentesque nec elit. Fusce in lacus. Vivamus a libero vitae lectus hendrerit hendrerit.</p>
-  </div>
-</div>' .
-'<script src="' . plugins_url( 'js/script.js' , __FILE__ ) . '"></script>';
+  <ul>';
+    foreach($groups as $key => $value) {
+    $html .= '<li><a href="#' . strtolower($key) . '">' . $key . '</a></li>';
+    }
+  $html .= '</ul>';
+  foreach ($entries as $key => $values) {
+      $html .= '<div id="' . strtolower($key) . '">';
+      foreach ($values as $id => $post ) {
+          $title = get_the_title($id);
+          $start_date = $post['_start_date'][0];
+          $end_date = $post['_end_date'][0];
+          
+          $html .= '<div class="schedule-item">';
+            $html .= '<div class="schedule-item-content">';
+                $html .= '<h2>' . $title . '</h2>';
+                $html .= '<span class="entry-date-range">' .
+                        $start_date . ' - ' . $end_date .
+                        '</span>';
+            $html .= '</div>';
+          $html .= '</div>';
+      }
+      $html .= '</div>';
+  }
+$html .= '</div>';
+$html .= '<script src="' . plugins_url( 'js/script.js' , __FILE__ ) . '"></script>';
     wp_enqueue_script('jQuery');
     wp_enqueue_script('jquery-ui-tabs');
     wp_enqueue_style('plugin_name-admin-ui-css',
@@ -285,4 +294,29 @@ add_action('wp_enqueue_scripts', 'library_hours_load_scripts');
 function library_hours_load_scripts () {
     wp_register_script('lh_script',get_stylesheet_directory_uri() . '/js/script.js', array('jQuery'),"1.0");
     
+}
+
+function library_hours_get_entries () {
+    $entry_list = array();
+    $args = array(
+        'post_type' => 'lib_hours_entry',
+    );
+    $query = new WP_Query($args);
+    while($query->have_posts()) {
+        $query->the_post();
+        $id = $query->post->ID;
+        $post_meta = get_post_meta($id);
+        $group = $post_meta['_schedule_tab_term'][0];
+        $entry_list[$group][$id] = $post_meta;
+    }
+    return $entry_list;
+}
+
+function library_hours_get_groups () {
+    $groups = array();
+    $entries = library_hours_get_entries();
+    foreach($entries as $key => $value){
+        $groups[$key] = 1; // I can change this to a sortable weight later.
+    }
+    return $groups;
 }
